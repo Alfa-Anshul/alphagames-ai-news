@@ -1,18 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 from sqlalchemy.orm import selectinload
 from typing import Optional, List
-from .app.db.database import get_db
-from .app.models.article import Article
-from .app.schemas.article import ArticleOut, ArticleDetail
+from ..db.database import get_db
+from ..models.article import Article
+from ..schemas.article import ArticleOut, ArticleDetail
 
 router = APIRouter()
 
 @router.get("/", response_model=List[ArticleOut])
 async def list_articles(
     category: Optional[str] = None,
-    tag: Optional[str] = None,
     featured: Optional[bool] = None,
     skip: int = 0,
     limit: int = 20,
@@ -24,7 +23,7 @@ async def list_articles(
     ).order_by(Article.published_at.desc())
 
     if category:
-        from .app.models.category import Category
+        from ..models.category import Category
         q = q.join(Article.category).where(Category.slug == category)
     if featured is not None:
         q = q.where(Article.featured == featured)
