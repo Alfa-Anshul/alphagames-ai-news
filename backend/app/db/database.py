@@ -12,7 +12,7 @@ class Base(DeclarativeBase):
 
 async def init_db():
     async with engine.begin() as conn:
-        from .app.models import article, category, tag
+        from ..models import article, category, tag
         await conn.run_sync(Base.metadata.create_all)
 
 async def get_db():
