@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 import os
 from contextlib import asynccontextmanager
 
@@ -14,8 +14,14 @@ from .services.scheduler import start_scheduler
 async def lifespan(app: FastAPI):
     await init_db()
     await seed_articles()
-    start_scheduler()
+    scheduler = start_scheduler()
     yield
+    # Graceful shutdown
+    try:
+        if scheduler and scheduler.running:
+            scheduler.shutdown(wait=False)
+    except Exception:
+        pass
 
 app = FastAPI(
     title="AlphaGames AI News API",
@@ -32,6 +38,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Security headers middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    return response
+
+# Health check MUST be registered before the SPA catch-all
+@app.get("/api/health")
+async def health():
+    return {"status": "ok", "service": "AlphaGames AI News"}
+
 app.include_router(articles.router, prefix="/api/articles", tags=["articles"])
 app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
 app.include_router(tags.router, prefix="/api/tags", tags=["tags"])
@@ -43,8 +65,5 @@ if os.path.exists(frontend_dist):
 
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
-        return FileResponse(os.path.join(frontend_dist, "index.html"))
-
-@app.get("/api/health")
-async def health():
-    return {"status": "ok", "service": "AlphaGames AI News"}
+        index_path = os.path.join(frontend_dist, "index.html")
+        return FileResponse(index_path)
