@@ -4,7 +4,9 @@ import { Clock, Eye } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 export default function ArticleCard({ article, featured = false }) {
-  const timeAgo = formatDistanceToNow(new Date(article.published_at), { addSuffix: true })
+  const timeAgo = article.published_at
+    ? formatDistanceToNow(new Date(article.published_at), { addSuffix: true })
+    : 'Recently'
 
   if (featured) {
     return (
@@ -58,7 +60,7 @@ export default function ArticleCard({ article, featured = false }) {
             </p>
             <div style={{ display: 'flex', gap: '1rem', fontSize: '0.62rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Clock size={9} /> {article.read_time}m</span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Eye size={9} /> {article.views}</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Eye size={9} /> {article.views ?? 0}</span>
               <span>{timeAgo}</span>
             </div>
           </div>
@@ -99,7 +101,7 @@ export default function ArticleCard({ article, featured = false }) {
           </h3>
           <div style={{ display: 'flex', gap: '0.8rem', fontSize: '0.6rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Clock size={8} /> {article.read_time}m</span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Eye size={8} /> {article.views}</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Eye size={8} /> {article.views ?? 0}</span>
             <span>{timeAgo}</span>
           </div>
         </div>
