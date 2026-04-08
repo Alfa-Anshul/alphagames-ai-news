@@ -16,6 +16,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ ./backend/
 COPY --from=frontend-builder /app/frontend/dist ./frontend_dist
 
+# Create persistent data directory for SQLite
+RUN mkdir -p /data
+
 EXPOSE 8000
+
+VOLUME ["/data"]
 
 CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
