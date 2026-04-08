@@ -5,10 +5,10 @@ from fastapi.responses import FileResponse
 import os
 from contextlib import asynccontextmanager
 
-from .app.db.database import init_db
-from .app.db.seed import seed_articles
-from .app.api import articles, categories, tags, search
-from .app.services.scheduler import start_scheduler
+from .db.database import init_db
+from .db.seed import seed_articles
+from .api import articles, categories, tags, search
+from .services.scheduler import start_scheduler
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
