@@ -33,6 +33,9 @@ export default function HomePage() {
 
   return (
     <div>
+      <h1 style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
+        AlphaGames AI News — GPU & AI Intelligence
+      </h1>
       <HeroSection />
       <div className="container" style={{ marginTop: '2.5rem' }}>
         <SectionHeader icon={<TrendingUp size={15} />} title="Featured Stories" />
