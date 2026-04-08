@@ -42,8 +42,8 @@ export default function ArticlePage() {
 
       <div style={{ display: 'flex', gap: '1.25rem', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-muted)', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={10} /> {article.read_time} min read</span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Eye size={10} /> {article.views} views</span>
-        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Calendar size={10} /> {format(new Date(article.published_at), 'MMM dd, yyyy')}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Eye size={10} /> {article.views ?? 0} views</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Calendar size={10} /> {article.published_at ? format(new Date(article.published_at), 'MMM dd, yyyy') : 'Recent'}</span>
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '2.25rem' }}>
@@ -61,9 +61,12 @@ export default function ArticlePage() {
           h2: ({children}) => <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.35rem', marginBottom: '0.65rem', marginTop: '1.75rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>{children}</h2>,
           h3: ({children}) => <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '1.05rem', marginBottom: '0.5rem', marginTop: '1.5rem', color: 'var(--text-primary)' }}>{children}</h3>,
           p: ({children}) => <p style={{ marginBottom: '1.1rem', lineHeight: 1.75, color: 'var(--text-secondary)', fontSize: '0.88rem' }}>{children}</p>,
-          code: ({inline, children}) => inline
-            ? <code style={{ background: 'rgba(0,245,255,0.08)', border: '1px solid var(--border)', padding: '2px 5px', borderRadius: 3, fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-cyan)' }}>{children}</code>
-            : <code>{children}</code>,
+          code: ({node, className, children, ...props}) => {
+            const isInline = !className && !String(children).includes('\n')
+            return isInline
+              ? <code style={{ background: 'rgba(0,245,255,0.08)', border: '1px solid var(--border)', padding: '2px 5px', borderRadius: 3, fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-cyan)' }} {...props}>{children}</code>
+              : <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }} {...props}>{children}</code>
+          },
           pre: ({children}) => <pre style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 6, padding: '1.1rem', overflowX: 'auto', marginBottom: '1.4rem', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', lineHeight: 1.6, color: 'var(--accent-green)' }}>{children}</pre>,
           strong: ({children}) => <strong style={{ color: 'var(--text-primary)', fontWeight: 700 }}>{children}</strong>,
           ul: ({children}) => <ul style={{ paddingLeft: '1.4rem', marginBottom: '1.1rem', color: 'var(--text-secondary)', fontSize: '0.88rem' }}>{children}</ul>,
