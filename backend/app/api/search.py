@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_
 from sqlalchemy.orm import selectinload
-from .app.db.database import get_db
-from .app.models.article import Article
-from .app.schemas.article import ArticleOut
+from ..db.database import get_db
+from ..models.article import Article
+from ..schemas.article import ArticleOut
 from typing import List
 
 router = APIRouter()
