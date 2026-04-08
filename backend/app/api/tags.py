@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from .app.db.database import get_db
-from .app.models.tag import Tag
-from .app.schemas.article import TagOut
+from ..db.database import get_db
+from ..models.tag import Tag
+from ..schemas.article import TagOut
 from typing import List
 
 router = APIRouter()
