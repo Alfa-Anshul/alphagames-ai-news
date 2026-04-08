@@ -90,7 +90,7 @@ export default function Layout() {
         fontSize: '0.72rem'
       }}>
         <div style={{ marginBottom: '0.4rem', color: 'var(--accent-cyan)', fontFamily: 'var(--font-display)', fontWeight: 700, letterSpacing: '-0.01em' }}>ALPHAGAMES AI NEWS</div>
-        <div>2025 Anervea.ai - GPU and AI Intelligence - FastAPI + React</div>
+        <div>© 2026 Anervea.ai — GPU and AI Intelligence — FastAPI + React</div>
       </footer>
     </div>
   )
